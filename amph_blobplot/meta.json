@@ -1,0 +1,518 @@
+{
+ "id": "amph_blobplot",
+ "assembly": {
+  "file": "../genomes/Amphimedon.fasta",
+  "scaffold-count": 3871,
+  "span": 167703827
+ },
+ "fields": [
+  {
+   "id": "identifiers",
+   "type": "identifier"
+  },
+  {
+   "id": "gc",
+   "preload": true,
+   "scale": "scaleLinear",
+   "name": "GC",
+   "datatype": "float",
+   "range": [
+    0.1917,
+    0.664
+   ],
+   "type": "variable"
+  },
+  {
+   "preload": true,
+   "scale": "scaleLog",
+   "id": "length",
+   "name": "Length",
+   "clamp": false,
+   "datatype": "integer",
+   "range": [
+    314,
+    4599197
+   ],
+   "type": "variable"
+  },
+  {
+   "scale": "scaleLinear",
+   "id": "ncount",
+   "name": "N count",
+   "datatype": "integer",
+   "range": [
+    0,
+    430429
+   ],
+   "type": "variable"
+  },
+  {
+   "datatype": "float",
+   "type": "variable",
+   "scale": "scaleLog",
+   "id": "coverage",
+   "name": "coverage",
+   "children": [
+    {
+     "id": "base_coverage",
+     "clamp": 0.01,
+     "range": [
+      0,
+      11463.2007
+     ],
+     "children": [
+      {
+       "id": "amph_mapped.sorted_cov",
+       "file": "amph_mapped.sorted.bam=amph_mapped.sorted",
+       "type": "variable",
+       "parent": "base_coverage"
+      }
+     ],
+     "parent": "coverage"
+    },
+    {
+     "id": "read_coverage",
+     "datatype": "integer",
+     "clamp": 1,
+     "range": [
+      0,
+      11639227
+     ],
+     "children": [
+      {
+       "id": "amph_mapped.sorted_read_cov",
+       "file": "amph_mapped.sorted.bam=amph_mapped.sorted",
+       "reads_mapped": 369098111,
+       "reads_unmapped": 213849942,
+       "type": "variable",
+       "parent": "read_coverage"
+      }
+     ],
+     "parent": "coverage"
+    }
+   ]
+  },
+  {
+   "datatype": "string",
+   "type": "category",
+   "id": "taxonomy",
+   "name": "Taxonomy",
+   "children": [
+    {
+     "id": "bestsumorder",
+     "children": [
+      {
+       "id": "bestsumorder_positions",
+       "name": "bestsumorder_positions",
+       "type": "multiarray",
+       "datatype": "mixed",
+       "preload": false,
+       "active": false,
+       "files": [
+        "amph_blast.out"
+       ],
+       "headers": [
+        "taxid",
+        "start",
+        "end",
+        "score",
+        "subject",
+        "index",
+        "title"
+       ]
+      },
+      {
+       "id": "bestsumorder_superkingdom",
+       "name": "bestsumorder_superkingdom",
+       "type": "category",
+       "data": [
+        {
+         "scale": "scaleLinear",
+         "id": "bestsumorder_superkingdom_cindex",
+         "name": "bestsumorder_superkingdom_cindex",
+         "datatype": "integer",
+         "range": [
+          0,
+          0
+         ],
+         "preload": false,
+         "active": false,
+         "type": "variable"
+        },
+        {
+         "scale": "scaleLog",
+         "id": "bestsumorder_superkingdom_score",
+         "name": "bestsumorder_superkingdom_score",
+         "clamp": 1,
+         "datatype": "float",
+         "range": [
+          0,
+          125513.0
+         ],
+         "preload": false,
+         "active": false,
+         "type": "variable"
+        },
+        {
+         "id": "bestsumorder_superkingdom_positions",
+         "name": "bestsumorder_superkingdom_positions",
+         "type": "multiarray",
+         "datatype": "string",
+         "preload": false,
+         "active": false,
+         "linked_field": "bestsumorder_positions",
+         "category_slot": 0,
+         "headers": [
+          "name"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "bestsumorder_kingdom",
+       "name": "bestsumorder_kingdom",
+       "type": "category",
+       "data": [
+        {
+         "scale": "scaleLinear",
+         "id": "bestsumorder_kingdom_cindex",
+         "name": "bestsumorder_kingdom_cindex",
+         "datatype": "integer",
+         "range": [
+          0,
+          0
+         ],
+         "preload": false,
+         "active": false,
+         "type": "variable"
+        },
+        {
+         "scale": "scaleLog",
+         "id": "bestsumorder_kingdom_score",
+         "name": "bestsumorder_kingdom_score",
+         "clamp": 1,
+         "datatype": "float",
+         "range": [
+          0,
+          125513.0
+         ],
+         "preload": false,
+         "active": false,
+         "type": "variable"
+        },
+        {
+         "id": "bestsumorder_kingdom_positions",
+         "name": "bestsumorder_kingdom_positions",
+         "type": "multiarray",
+         "datatype": "string",
+         "preload": false,
+         "active": false,
+         "linked_field": "bestsumorder_positions",
+         "category_slot": 0,
+         "headers": [
+          "name"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "bestsumorder_phylum",
+       "name": "bestsumorder_phylum",
+       "type": "category",
+       "data": [
+        {
+         "scale": "scaleLinear",
+         "id": "bestsumorder_phylum_cindex",
+         "name": "bestsumorder_phylum_cindex",
+         "datatype": "integer",
+         "range": [
+          0,
+          0
+         ],
+         "preload": false,
+         "active": false,
+         "type": "variable"
+        },
+        {
+         "scale": "scaleLog",
+         "id": "bestsumorder_phylum_score",
+         "name": "bestsumorder_phylum_score",
+         "clamp": 1,
+         "datatype": "float",
+         "range": [
+          0,
+          125513.0
+         ],
+         "preload": false,
+         "active": false,
+         "type": "variable"
+        },
+        {
+         "id": "bestsumorder_phylum_positions",
+         "name": "bestsumorder_phylum_positions",
+         "type": "multiarray",
+         "datatype": "string",
+         "preload": false,
+         "active": false,
+         "linked_field": "bestsumorder_positions",
+         "category_slot": 0,
+         "headers": [
+          "name"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "bestsumorder_class",
+       "name": "bestsumorder_class",
+       "type": "category",
+       "data": [
+        {
+         "scale": "scaleLinear",
+         "id": "bestsumorder_class_cindex",
+         "name": "bestsumorder_class_cindex",
+         "datatype": "integer",
+         "range": [
+          0,
+          0
+         ],
+         "preload": false,
+         "active": false,
+         "type": "variable"
+        },
+        {
+         "scale": "scaleLog",
+         "id": "bestsumorder_class_score",
+         "name": "bestsumorder_class_score",
+         "clamp": 1,
+         "datatype": "float",
+         "range": [
+          0,
+          125513.0
+         ],
+         "preload": false,
+         "active": false,
+         "type": "variable"
+        },
+        {
+         "id": "bestsumorder_class_positions",
+         "name": "bestsumorder_class_positions",
+         "type": "multiarray",
+         "datatype": "string",
+         "preload": false,
+         "active": false,
+         "linked_field": "bestsumorder_positions",
+         "category_slot": 0,
+         "headers": [
+          "name"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "bestsumorder_order",
+       "name": "bestsumorder_order",
+       "type": "category",
+       "data": [
+        {
+         "scale": "scaleLinear",
+         "id": "bestsumorder_order_cindex",
+         "name": "bestsumorder_order_cindex",
+         "datatype": "integer",
+         "range": [
+          0,
+          0
+         ],
+         "preload": false,
+         "active": false,
+         "type": "variable"
+        },
+        {
+         "scale": "scaleLog",
+         "id": "bestsumorder_order_score",
+         "name": "bestsumorder_order_score",
+         "clamp": 1,
+         "datatype": "float",
+         "range": [
+          0,
+          125513.0
+         ],
+         "preload": false,
+         "active": false,
+         "type": "variable"
+        },
+        {
+         "id": "bestsumorder_order_positions",
+         "name": "bestsumorder_order_positions",
+         "type": "multiarray",
+         "datatype": "string",
+         "preload": false,
+         "active": false,
+         "linked_field": "bestsumorder_positions",
+         "category_slot": 0,
+         "headers": [
+          "name"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "bestsumorder_family",
+       "name": "bestsumorder_family",
+       "type": "category",
+       "data": [
+        {
+         "scale": "scaleLinear",
+         "id": "bestsumorder_family_cindex",
+         "name": "bestsumorder_family_cindex",
+         "datatype": "integer",
+         "range": [
+          0,
+          0
+         ],
+         "preload": false,
+         "active": false,
+         "type": "variable"
+        },
+        {
+         "scale": "scaleLog",
+         "id": "bestsumorder_family_score",
+         "name": "bestsumorder_family_score",
+         "clamp": 1,
+         "datatype": "float",
+         "range": [
+          0,
+          125513.0
+         ],
+         "preload": false,
+         "active": false,
+         "type": "variable"
+        },
+        {
+         "id": "bestsumorder_family_positions",
+         "name": "bestsumorder_family_positions",
+         "type": "multiarray",
+         "datatype": "string",
+         "preload": false,
+         "active": false,
+         "linked_field": "bestsumorder_positions",
+         "category_slot": 0,
+         "headers": [
+          "name"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "bestsumorder_genus",
+       "name": "bestsumorder_genus",
+       "type": "category",
+       "data": [
+        {
+         "scale": "scaleLinear",
+         "id": "bestsumorder_genus_cindex",
+         "name": "bestsumorder_genus_cindex",
+         "datatype": "integer",
+         "range": [
+          0,
+          0
+         ],
+         "preload": false,
+         "active": false,
+         "type": "variable"
+        },
+        {
+         "scale": "scaleLog",
+         "id": "bestsumorder_genus_score",
+         "name": "bestsumorder_genus_score",
+         "clamp": 1,
+         "datatype": "float",
+         "range": [
+          0,
+          125513.0
+         ],
+         "preload": false,
+         "active": false,
+         "type": "variable"
+        },
+        {
+         "id": "bestsumorder_genus_positions",
+         "name": "bestsumorder_genus_positions",
+         "type": "multiarray",
+         "datatype": "string",
+         "preload": false,
+         "active": false,
+         "linked_field": "bestsumorder_positions",
+         "category_slot": 0,
+         "headers": [
+          "name"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "bestsumorder_species",
+       "name": "bestsumorder_species",
+       "type": "category",
+       "data": [
+        {
+         "scale": "scaleLinear",
+         "id": "bestsumorder_species_cindex",
+         "name": "bestsumorder_species_cindex",
+         "datatype": "integer",
+         "range": [
+          0,
+          0
+         ],
+         "preload": false,
+         "active": false,
+         "type": "variable"
+        },
+        {
+         "scale": "scaleLog",
+         "id": "bestsumorder_species_score",
+         "name": "bestsumorder_species_score",
+         "clamp": 1,
+         "datatype": "float",
+         "range": [
+          0,
+          125513.0
+         ],
+         "preload": false,
+         "active": false,
+         "type": "variable"
+        },
+        {
+         "id": "bestsumorder_species_positions",
+         "name": "bestsumorder_species_positions",
+         "type": "multiarray",
+         "datatype": "string",
+         "preload": false,
+         "active": false,
+         "linked_field": "bestsumorder_positions",
+         "category_slot": 0,
+         "headers": [
+          "name"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "links": {},
+ "name": "amph_blobplot",
+ "plot": {
+  "x": "gc",
+  "z": "length",
+  "y": "amph_mapped.sorted_cov",
+  "cat": "bestsumorder_phylum"
+ },
+ "record_type": "record",
+ "records": 3871,
+ "taxon": {},
+ "version": 1,
+ "revision": 0
+}
