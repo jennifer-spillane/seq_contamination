@@ -3,6 +3,35 @@
 import argparse
 
 
+def calculate_percents(kmer_sets):
+    #setting up the lists of both kinds of kmers with 0s so that it's never empty for the math later
+    unclassified_kmers = [0.0]
+    classified_kmers = [0.0]
+    percentage = 0.0
+    switch = True
+    for item in kmer_sets:
+        #split on the colons to separate the id from the number
+        num_kmers = item.split(":")
+        #if the id is 0 (unclassified), we add that number of kmers to the list, if it's an "A", we ignore it, every other kmer number gets added to the other list.
+        if num_kmers[0].strip() == "0":
+            unclassified_kmers.append(float(num_kmers[1]))
+        elif num_kmers[0].strip() == "A":
+            continue
+        else:
+            classified_kmers.append(float(num_kmers[1]))
+            
+    total_kmers = ((sum(classified_kmers)) + (sum(unclassified_kmers)))
+    #print(total_kmers)
+    if total_kmers == 0.0:
+        switch = False
+    else:       
+        #calculate the percentage of classified kmers in the total kmers from the read for the first read
+        percentage = (sum(classified_kmers)) / total_kmers
+    #print(percentage, switch)
+    return [percentage, switch]
+
+
+
 def parse_kraken():
     lines_for_output = []
     try:
@@ -19,49 +48,21 @@ def parse_kraken():
                         #the read name is harvested from the header by kraken2 - should be useful for pulling reads later
                         read_name = fields[1].strip()
                 
-                
-                        #setting up some empty strings to hold percentages of classified kmers (because I didn't know how to set up empty floats)
-                        percentage1 = ""
-                        percentage2 = ""
                         #splits into the kmer assignments for each read in the pair
                         assignment = fields[4].split("|:|")
                         #need to split again on whitespace to get the individual id and number pairs
                         kmer_sets1 = (assignment[0].strip()).split()
                         kmer_sets2 = (assignment[1].strip()).split()
-                        #setting up the lists of both kinds of kmers (for both reads in the pair) with 0s so that it's never empty for the math later
-                        unclassified_kmers1 = [0.0]
-                        classified_kmers1 = [0.0]
-                        unclassified_kmers2 = [0.0]
-                        classified_kmers2 = [0.0]
-                    
-                        for item in kmer_sets1:
-                            #split AGAIN on the colons to separate the id from the number
-                            num_kmers = item.split(":")
-                            #if the id is 0 (unclassified), we add that number of kmers to the list, if it's an "A", we ignore it, every other kmer number gets added to the other list.
-                            if num_kmers[0].strip() == "0":
-                                unclassified_kmers1.append(float(num_kmers[1]))
-                            elif num_kmers[0].strip() == "A":
-                                continue
-                            else:
-                                classified_kmers1.append(float(num_kmers[1]))
-                    
-                        #calculate the percentage of classified kmers in the total kmers from the read for the first read
-                        percentage1 = (sum(classified_kmers1)) / ((sum(classified_kmers1)) + (sum(unclassified_kmers1)))
+                        
+                        #call the calculation function for each read in the pair and store the result
+                        percent_classified1 = calculate_percents(kmer_sets1)
+                        percent_classified2 = calculate_percents(kmer_sets2)
 
-                        #all the same stuff, but for the second read in the pair
-                        for item in kmer_sets2:
-                            num_kmers = item.split(":")
-                            if num_kmers[0].strip() == "0":
-                                unclassified_kmers2.append(float(num_kmers[1]))
-                            elif num_kmers[0].strip() == "A":
-                                continue
-                            else:
-                                classified_kmers2.append(float(num_kmers[1]))
-                            
-                        percentage2 = (sum(classified_kmers2)) / ((sum(classified_kmers2)) + (sum(unclassified_kmers2)))
-
-                        #make a tuple to keep everything together and append to the list of all the lines we'll write to the output file
-                        lines_for_output.append((read_class, read_name, percentage1, percentage2))
+                        if percent_classified1[1] and percent_classified2[1]:
+                            #make a tuple to keep everything together and append to the list of all the lines we'll write to the output file
+                            lines_for_output.append((read_class, read_name, percent_classified1[0], percent_classified2[0]))
+                        else:
+                            continue
 
                     #write the output file so that the format works for ggplot (each read in the pair on a different line)
                     for read_line in lines_for_output:
@@ -76,22 +77,18 @@ def parse_kraken():
                         read_class = fields[0].strip()
                         #the read name is harvested from the header by kraken2 - should be useful for pulling reads later
                         read_name = fields[1].strip()
-                        percentage = ""
-                        kmer_sets = fields[4].split()
-                        unclassified_kmers = [0.0]
-                        classified_kmers = [0.0]
-                        for item in kmer_sets:
-                            num_kmers = item.split(":")
-                            if num_kmers[0].strip() == "0":
-                                unclassified_kmers.append(float(num_kmers[1]))
-                            elif num_kmers[0].strip() == "A":
-                                continue
-                            else:
-                                classified_kmers.append(float(num_kmers[1]))
-                            
-                        percentage = (sum(classified_kmers)) / ((sum(classified_kmers)) + (sum(unclassified_kmers)))
-
-                        lines_for_output.append((read_class, read_name, percentage))
+                        
+                        #splits into the kmer assignments for each read in the pair
+                        kmer_sets3 = fields[4].split()
+                        
+                        #call the calculation function for the read and store the result
+                        percent_classified = calculate_percents(kmer_sets3)
+                        
+                        if percent_classified[1]:
+                            #make a tuple to keep everything together and append to the list of all the lines we'll write to the output file
+                            lines_for_output.append((read_class, read_name, percent_classified[0]))
+                        else:
+                            continue
 
                     #output file can be more basic as there aren't as many things to keep straight
                     for read_line in lines_for_output:
